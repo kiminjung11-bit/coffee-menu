@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>브릿지 커피 메뉴판</title>
+
+  <!-- 고운 돋움 글꼴: 휴대폰에는 대부분 설치되어 있지 않아서 인터넷에서 불러옵니다.
+       (인터넷이 안 되면 자동으로 맑은 고딕 등 다른 글꼴로 보입니다) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+  <!-- =====================================================================
+       ★★★ 메뉴 정보 보관함 (메뉴를 고칠 때는 이 상자 안만 보면 됩니다) ★★★
+
+       이 아래 "메뉴목록" 안의 내용이 화면에 그대로 나타납니다.
+       화면 아래쪽의 다른 코드는 건드리지 않으셔도 됩니다.
+
+       ■ 메뉴 하나는 이렇게 생겼어요 (한 줄이 메뉴 하나):
+           { 이름: "아메리카노", 가격: 4500, 설명: "산미가 적은 고소한 원두", 재고: "O" },
+           (줄 끝의 재고: "O" 는 '오늘 팔 수 있다'는 뜻이에요. 아래 '품절' 설명을 보세요)
+
+       ■ 가격을 고치고 싶을 때
+           가격: 4500  ← 이 숫자만 바꾸세요.
+           · 숫자만 쓰세요.  (O) 5000      (X) 5,000   (X) 5000원
+           · 쉼표(,)와 '원' 글자는 화면에 자동으로 붙습니다.
+
+       ■ 이름이나 설명을 고치고 싶을 때
+           큰따옴표(" ") 안의 글자만 바꾸세요. 따옴표 자체는 지우면 안 돼요!
+
+       ■ 메뉴를 새로 추가하고 싶을 때
+           1) 추가하고 싶은 칸(커피 / 논커피 / 디저트)을 찾아요.
+           2) 그 칸 안에서 메뉴 한 줄을 통째로 복사해요.
+           3) 같은 칸 안, 닫는 대괄호 ] 바로 위에 붙여넣어요.
+           4) 이름·가격·설명을 바꿔요.
+           ※ 줄 끝의 쉼표(,)를 꼭 남겨두세요!
+
+       ■ 메뉴를 지우고 싶을 때
+           지우고 싶은 메뉴 "한 줄"을 통째로 지우세요. (다른 줄은 건드리지 마세요)
+
+       ■ '사장님 pick!' 배지(시그니처 표시)를 붙이고 싶을 때
+           메뉴 줄에 시그니처: true 를 넣으세요. 이렇게요:
+           { 이름: "아메리카노", 가격: 4500, 설명: "...", 시그니처: true, 재고: "O" },
+           · 배지가 붙고, 그 카드가 살짝 더 크게 강조돼요.
+           · 빼고 싶으면 시그니처: true, 부분만 지우세요.
+           · 배지 글자를 바꾸고 싶으면(예: "대표 메뉴") 아래쪽 "사장님 pick!" 글자를 찾아 고치세요.
+
+       ■ '오늘 품절' 표시를 켜고 끄고 싶을 때 (글자 딱 하나만 바꾸면 돼요!)
+           모든 메뉴 줄 끝에는 재고: "O" 가 들어 있어요.
+           · 품절로 만들기:  재고: "O"  →  재고: "X"   (알파벳 O를 X로)
+               → 그 메뉴가 흐리게 보이고 '오늘 품절' 표시가 떠요.
+           · 다시 팔 때:      재고: "X"  →  재고: "O"   (X를 O로)
+           · 큰따옴표(" ")는 그대로 두고, 그 안의 글자 하나만 바꾸세요.
+           · 새 메뉴를 추가할 때는 줄 끝에 재고: "O" 를 꼭 같이 넣어 주세요.
+             (빠뜨려도 판매 중으로 보이니 화면이 깨지지는 않아요)
+
+       ■ 새 칸(예: "샌드위치")을 만들고 싶을 때
+           아래 칸 하나(  { 칸이름: ... },  )를 통째로 복사해서
+           맨 아래 칸 뒤에 붙여넣고, 칸이름과 메뉴 줄을 바꾸세요.
+           (위쪽 카테고리 버튼도 저절로 하나 늘어납니다)
+
+       ■ 칸이나 메뉴의 순서를 바꾸고 싶을 때
+           줄을 잘라내서(Ctrl+X) 원하는 위치에 붙여넣으세요(Ctrl+V).
+
+       ■ 이것만 조심하세요
+           · 따옴표(" "), 중괄호({ }), 대괄호([ ]), 쉼표(,)를 지우지 마세요.
+           · 고친 뒤 화면이 하얗게 나오면 괄호나 쉼표가 빠진 거예요.
+             Ctrl+Z로 되돌린 뒤 다시 해보세요.
+       ===================================================================== -->
+  <script>
+    const 메뉴목록 = [
+
+      // ───────── 첫 번째 칸: 커피 ─────────
+      {
+        칸이름: "커피",
+        메뉴: [
+          { 이름: "아메리카노",        가격: 4800, 설명: "산미가 적은 고소한 원두", 재고: "O" },
+          { 이름: "카페라떼",          가격: 5000, 설명: "부드러운 우유 거품", 재고: "O" },
+          { 이름: "바닐라 라떼",       가격: 5500, 설명: "바닐라빈을 직접 우려낸 시럽", 재고: "O" },
+          { 이름: "아인슈페너",        가격: 5800, 설명: "단맛을 줄인 수제 크림", 시그니처: true, 재고: "O" },
+          { 이름: "콜드브루",          가격: 5300, 설명: "12시간 저온 추출, 목넘김이 깔끔함", 재고: "O" },
+          { 이름: "디카페인 아메리카노", 가격: 5000, 설명: "카페인 걱정 없이 편하게", 재고: "O" },
+          // ↑ 커피 메뉴를 추가하려면 이 줄 바로 위에 한 줄을 붙여넣으세요.
+        ]
+      },
+
+      // ───────── 두 번째 칸: 논커피 ─────────
+      {
+        칸이름: "논커피",
+        메뉴: [
+          { 이름: "흑임자 라떼", 가격: 5500, 설명: "국산 흑임자를 직접 갈아 넣음", 시그니처: true, 재고: "O" },
+          { 이름: "말차 라떼",   가격: 5800, 설명: "우지 말차, 쌉쌀한 맛이 진함", 재고: "O" },
+          { 이름: "쑥 라떼",     가격: 5500, 설명: "강화도 쑥, 은은하고 담백함", 재고: "O" },
+          { 이름: "곡물 라떼",   가격: 5300, 설명: "볶은 곡물의 구수한 맛", 재고: "O" },
+          { 이름: "자몽에이드",  가격: 6000, 설명: "생과일 자몽 과육을 그대로", 재고: "O" },
+          // ↑ 논커피 메뉴를 추가하려면 이 줄 바로 위에 한 줄을 붙여넣으세요.
+        ]
+      },
+
+      // ───────── 세 번째 칸: 디저트 ─────────
+      {
+        칸이름: "디저트",
+        메뉴: [
+          { 이름: "치즈케이크",       가격: 6500, 설명: "굽지 않은 부드러운 식감", 재고: "O" },
+          { 이름: "당근케이크",       가격: 6000, 설명: "견과류를 넉넉히 넣음", 재고: "O" },
+          { 이름: "스콘",             가격: 4000, 설명: "겉은 바삭 속은 촉촉, 잼과 함께", 재고: "O" },
+          { 이름: "바스크 치즈케이크", 가격: 6800, 설명: "겉면을 진하게 태운 풍미", 재고: "O" },
+          // ↑ 디저트 메뉴를 추가하려면 이 줄 바로 위에 한 줄을 붙여넣으세요.
+        ]
+      },
+
+      // ↑ 새 칸을 만들려면 이 줄 바로 위에 칸 하나를 통째로 붙여넣으세요.
+    ];
+  </script>
+  <!-- ★★★ 메뉴 정보 보관함 끝 ★★★ -->
+
+  <style>
+    /* ===== 색깔 (바꾸고 싶으면 여기 숫자만 고치세요) =====
+       디자인 느낌: 색종이를 여러 겹 오려 붙인 것처럼 (종이 오리기 스타일) */
+    :root {
+      --바탕: #F5EFE6;        /* 화면 전체 바탕 (크림색 종이) */
+      --종이: #FFFDF8;        /* 카드 종이 (밝은 흰색에 가까운 크림) */
+      --글자: #3B2A20;        /* 기본 글자색 (짙은 갈색) */
+      --코랄: #F0523C;        /* 대표 색 1: 밝은 산호색 (제목, 선택된 버튼, 전화 버튼) */
+      --노랑: #FFC83D;        /* 대표 색 2: 밝은 노랑 (대표 표시, 칸 이름표) */
+      --민트: #46C9A7;        /* 포인트: 민트 (장식) */
+      --하늘: #5BB5F5;        /* 포인트: 하늘색 (장식) */
+      --가격색: #D6402A;      /* 가격 글자색 (잘 보이도록 코랄보다 살짝 진하게) */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      /* 글꼴: 고운 돋움 먼저, 없으면 맑은 고딕 */
+      font-family: "고운 돋움", "GowunDodum", "Gowun Dodum", "맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      -webkit-text-size-adjust: 100%;          /* 휴대폰을 눕혀도 글자가 멋대로 커지지 않게 */
+      word-break: keep-all;                    /* 한글이 단어 중간에서 끊기지 않게 */
+      overflow-wrap: break-word;               /* 너무 긴 글자는 넘치지 않고 줄바꿈 */
+      background: var(--바탕);
+      color: var(--글자);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* 휴대폰 폭(390px) 기준 */
+    .화면 {
+      max-width: 390px;
+      margin: 0 auto;
+      padding: 0 20px 56px;
+      overflow-x: clip;     /* 옆으로 삐져나오는 것을 자름 (hidden을 쓰면 위쪽 버튼이 따라오지 않아서 clip 사용) */
+    }
+
+    /* ===== 맨 위: 색종이 여러 겹 + 가게 이름 ===== */
+    .맨위 {
+      position: relative;
+      margin: 0 -20px;           /* 화면 좌우 끝까지 */
+      height: 270px;
+      text-align: center;
+    }
+    /* 종이 겹 3장 (뒤 → 앞 순서로 노랑, 민트, 코랄). 장 사이에 부드러운 그림자 */
+    .종이겹 {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .종이겹 path { filter: drop-shadow(0 5px 6px rgba(59, 42, 32, 0.22)); }
+    .맨위글 {
+      position: absolute;
+      left: 0; right: 0;
+      top: 62px;
+      padding: 0 20px;
+      color: #fff;
+    }
+    .맨위 h1 {
+      font-size: 36px;
+      letter-spacing: 1px;
+      text-shadow: 0 3px 0 rgba(59, 42, 32, 0.18);
+    }
+    .소개 { margin-top: 8px; font-size: 17px; font-weight: bold; }
+    .위치 { margin-top: 2px; font-size: 14px; opacity: 0.95; }
+
+    /* ===== 카테고리 버튼 (화면 위쪽, 스크롤해도 따라옴) ===== */
+    .분류버튼들 {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      margin: 0 -20px;
+      padding: 14px 20px 16px;
+      overflow-x: auto;                       /* 칸이 많아지면 옆으로 밀어서 볼 수 있음 */
+      background: rgba(245, 239, 230, 0.94);
+      box-shadow: 0 6px 10px -6px rgba(59, 42, 32, 0.25);
+      scrollbar-width: none;                  /* 옆으로 미는 막대는 숨김 */
+    }
+    .분류버튼들::-webkit-scrollbar { display: none; }
+    .분류버튼 {
+      flex: 1 0 auto;
+      min-height: 52px;                       /* 손가락으로 누르기 편한 높이 (바꾸려면 이 숫자) */
+      padding: 0 22px;
+      font-family: inherit;
+      font-size: 17px;                        /* 버튼 글자 크기 */
+      color: var(--글자);
+      background: var(--종이);
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 3px 0 rgba(59, 42, 32, 0.12), 0 6px 12px rgba(59, 42, 32, 0.12);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .분류버튼:active { transform: translateY(2px); }
+    /* 지금 선택된 버튼: 코랄 색 종이로 */
+    .분류버튼.선택됨 {
+      color: #fff;
+      background: var(--코랄);
+      font-weight: bold;
+      box-shadow: 0 3px 0 #C23C28, 0 8px 14px rgba(240, 82, 60, 0.35);
+    }
+
+    /* ===== 가운데: 메뉴 ===== */
+    /* 칸 제목(커피 등): 비스듬히 붙인 노란 색종이 이름표 */
+    .분류제목 {
+      display: inline-block;
+      margin: 38px 0 20px 4px;
+      padding: 6px 20px;
+      font-size: 19px;
+      color: var(--글자);
+      background: var(--노랑);
+      border-radius: 12px;
+      transform: rotate(-1.5deg);
+      box-shadow: 0 3px 0 rgba(59, 42, 32, 0.15), 0 6px 10px rgba(59, 42, 32, 0.15);
+    }
+
+    /* 메뉴 카드: 흰 종이 한 장 + 그 밑에 살짝 어긋나게 깔린 색종이 한 장 */
+    .메뉴 {
+      position: relative;
+      isolation: isolate;
+      margin-bottom: 24px;
+      padding: 20px 22px;
+      border-radius: 22px;
+    }
+    .메뉴::before {                           /* 맨 밑에 깔린 색종이 */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: var(--밑종이, var(--하늘));
+      border-radius: 22px;
+      transform: translate(6px, 7px) rotate(0.8deg);
+      box-shadow: 0 6px 12px rgba(59, 42, 32, 0.16);
+    }
+    .메뉴::after {                            /* 그 위에 올린 흰 종이 (글자가 올라가는 바닥) */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: var(--종이);
+      border-radius: 22px;
+      box-shadow: 0 6px 14px rgba(59, 42, 32, 0.14);
+    }
+    /* 밑종이 색을 돌아가며 바꿈 (4가지 색) */
+    .메뉴:nth-of-type(4n+1) { --밑종이: var(--하늘); }
+    .메뉴:nth-of-type(4n+2) { --밑종이: var(--민트); }
+    .메뉴:nth-of-type(4n+3) { --밑종이: var(--노랑); }
+    .메뉴:nth-of-type(4n+4) { --밑종이: var(--코랄); }
+
+    .메뉴줄 { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+    .메뉴이름 { font-size: 19px; font-weight: bold; }
+    .가격 {                                    /* 가격: 크고 진하게 */
+      font-size: 21px;
+      font-weight: bold;
+      color: var(--가격색);
+      white-space: nowrap;
+    }
+    .설명 { margin-top: 6px; font-size: 15px; opacity: 0.8; }
+
+    /* 시그니처 메뉴: 배지 + 카드가 살짝 더 강조됨 (노란 테두리, 더 진한 그림자, 코랄 밑종이) */
+    .배지 {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 3px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #fff;
+      background: var(--코랄);
+      border-radius: 999px;
+      box-shadow: 0 2px 0 #C23C28;
+    }
+    .메뉴.시그니처::after {
+      background: #FFF8E1;
+      outline: 3px solid var(--노랑);
+      box-shadow: 0 10px 22px rgba(59, 42, 32, 0.22);
+    }
+    .메뉴.시그니처::before { background: var(--코랄); }
+    .메뉴.시그니처 .메뉴이름 { font-size: 20px; }
+
+    /* 품절 메뉴: 흐리게 + 가격에 취소선 + '오늘 품절' 도장 */
+    .메뉴.품절::after { background: #EFE9DF; }
+    .메뉴.품절 .메뉴줄,
+    .메뉴.품절 .설명,
+    .메뉴.품절 .배지 { opacity: 0.4; }
+    .메뉴.품절 .가격 { text-decoration: line-through; }
+    .품절표시 {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      padding: 4px 14px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      background: var(--글자);
+      border-radius: 999px;
+      transform: rotate(3deg);
+      box-shadow: 0 3px 8px rgba(59, 42, 32, 0.3);
+    }
+
+    /* ===== 맨 아래: 영업시간, 안내, 전화 ===== */
+    .아래 {
+      position: relative;
+      isolation: isolate;
+      margin-top: 44px;
+      padding: 24px 24px 26px;
+      border-radius: 24px;
+    }
+    .아래::after {                            /* 위에 올린 흰 종이 */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: var(--종이);
+      border-radius: 24px;
+      box-shadow: 0 6px 14px rgba(59, 42, 32, 0.14);
+    }
+    .아래::before {                           /* 밑에 깔린 민트 색종이 */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background: var(--민트);
+      border-radius: 24px;
+      transform: translate(6px, 8px) rotate(-0.8deg);
+      box-shadow: 0 6px 12px rgba(59, 42, 32, 0.16);
+    }
+    .아래 h2 { font-size: 20px; margin-bottom: 10px; }
+    .시간줄 { display: flex; justify-content: space-between; font-size: 16.5px; padding: 6px 0; }
+    .휴무 { color: var(--가격색); font-weight: bold; }
+    .안내 { margin-top: 16px; font-size: 14.5px; opacity: 0.85; }
+
+    .전화버튼 {
+      display: block;
+      margin-top: 22px;
+      padding: 18px;                          /* 버튼 크기 */
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+      background: var(--코랄);
+      border-radius: 999px;
+      box-shadow: 0 5px 0 #C23C28, 0 10px 18px rgba(240, 82, 60, 0.35);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .전화버튼:active { transform: translateY(3px); box-shadow: 0 2px 0 #C23C28; }
+
+    /* ===== 휴대폰을 가로로 눕혔을 때 (화면 높이가 낮을 때) ===== */
+    @media (max-height: 500px) {
+      .맨위 { height: 210px; }
+      .맨위글 { top: 36px; }
+      .맨위 h1 { font-size: 30px; }
+      .분류버튼들 { padding: 8px 20px 10px; }   /* 위쪽 버튼 줄이 화면을 너무 많이 가리지 않게 */
+      .분류버튼 { min-height: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="화면">
+
+    <!-- ===== 1. 맨 위: 가게 이름과 한 줄 소개 ===== -->
+    <!-- 색종이 3장을 겹쳐 놓은 그림입니다. 색을 바꾸려면 fill="..." 의 색 코드를 고치세요. -->
+    <header class="맨위">
+      <svg class="종이겹" viewBox="0 0 390 270" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="#FFC83D" d="M0 0H390V250C340 268 300 232 245 246C190 260 150 232 95 246C50 257 25 244 0 250Z"/>
+        <path fill="#46C9A7" d="M0 0H390V222C335 240 295 206 240 220C185 234 145 208 92 220C48 230 22 218 0 224Z"/>
+        <path fill="#F0523C" d="M0 0H390V192C340 208 300 178 245 190C190 202 150 180 95 190C50 198 25 188 0 192Z"/>
+      </svg>
+      <div class="맨위글">
+        <h1>브릿지 커피</h1>
+        <p class="소개">매일 직접 볶는 스페셜티 커피</p>
+        <p class="위치">광주 북구 비엔날레</p>
+      </div>
+    </header>
+
+    <!-- 카테고리 버튼 자리 (버튼은 맨 위 보관함의 칸이름으로 자동 만들어집니다) -->
+    <nav class="분류버튼들" id="분류버튼자리"></nav>
+
+    <!-- ===== 2. 가운데: 메뉴 목록 ===== -->
+    <!-- 이 자리에는 파일 맨 위 '메뉴 정보 보관함'의 내용이 자동으로 채워집니다.
+         메뉴를 고치려면 여기가 아니라 맨 위 보관함을 고치세요. -->
+    <main id="메뉴자리"></main>
+
+    <!-- ===== 3. 맨 아래: 영업시간과 전화 걸기 ===== -->
+    <footer class="아래">
+      <h2>영업시간</h2>
+      <div class="시간줄"><span>평일</span><span>08:00 - 21:00</span></div>
+      <div class="시간줄"><span>주말</span><span>10:00 - 20:00</span></div>
+      <div class="시간줄"><span>목요일</span><span class="휴무">휴무</span></div>
+
+      <p class="안내">주차 2대 가능 · 인스타 @bridge_coffee · 1인 좌석 6석</p>
+
+      <!-- 전화번호를 바꾸려면 아래 href 안의 번호를 고치세요 -->
+      <a class="전화버튼" href="tel:062-000-0000">📞 전화 걸기</a>
+    </footer>
+
+  </div>
+
+  <!-- ===== 아래는 보관함의 메뉴를 화면에 그려주는 기계입니다. 고치지 않으셔도 돼요. ===== -->
+  <script>
+    const 자리 = document.getElementById("메뉴자리");
+    const 버튼자리 = document.getElementById("분류버튼자리");
+
+    // 버튼 만들기: '전체' + 보관함의 칸이름들(커피, 논커피, 디저트...)
+    // 보관함에 새 칸을 만들면 버튼도 자동으로 하나 늘어납니다.
+    const 버튼이름들 = ["전체"].concat(메뉴목록.map(function (칸) { return 칸.칸이름; }));
+    버튼이름들.forEach(function (이름) {
+      const 버튼 = document.createElement("button");
+      버튼.type = "button";
+      버튼.className = "분류버튼";
+      버튼.textContent = 이름;
+      버튼.addEventListener("click", function () {
+        그리기(이름);
+        // 아래로 스크롤한 상태에서 눌러도, 바뀐 메뉴의 맨 위부터 보이게 올려줌
+        if (window.scrollY > 버튼자리.offsetTop) window.scrollTo(0, 버튼자리.offsetTop);
+      });
+      버튼자리.appendChild(버튼);
+    });
+
+    // 선택한 칸의 메뉴만 화면에 그리기 ("전체"면 모두)
+    function 그리기(선택) {
+      자리.innerHTML = "";
+
+      // 선택된 버튼만 색을 다르게
+      버튼자리.querySelectorAll(".분류버튼").forEach(function (버튼) {
+        버튼.classList.toggle("선택됨", 버튼.textContent === 선택);
+      });
+
+    메뉴목록.forEach(function (칸) {
+      if (선택 !== "전체" && 선택 !== 칸.칸이름) return;   // 선택하지 않은 칸은 건너뜀
+
+      // 칸 제목 (예: 커피)
+      const 제목 = document.createElement("h2");
+      제목.className = "분류제목";
+      제목.textContent = 칸.칸이름;
+      자리.appendChild(제목);
+
+      // 칸 안의 메뉴들
+      칸.메뉴.forEach(function (메뉴) {
+        const 카드 = document.createElement("div");
+        카드.className = "메뉴";
+        if (메뉴.시그니처) 카드.classList.add("시그니처");
+        if (메뉴.재고 === "X") 카드.classList.add("품절");   // 재고가 "X"면 품절
+
+        // '오늘 품절' 도장 글자를 바꾸려면 아래 "오늘 품절" 을 고치세요.
+        if (메뉴.재고 === "X") {
+          const 도장 = document.createElement("span");
+          도장.className = "품절표시";
+          도장.textContent = "오늘 품절";
+          카드.appendChild(도장);
+        }
+
+        // '사장님 pick!' 배지 글자를 바꾸려면 아래 "사장님 pick!" 을 고치세요.
+        if (메뉴.시그니처) {
+          const 배지 = document.createElement("span");
+          배지.className = "배지";
+          배지.textContent = "사장님 pick!";
+          카드.appendChild(배지);
+          카드.appendChild(document.createElement("br"));
+        }
+
+        const 줄 = document.createElement("div");
+        줄.className = "메뉴줄";
+
+        const 이름 = document.createElement("span");
+        이름.className = "메뉴이름";
+        이름.textContent = 메뉴.이름;
+
+        const 가격 = document.createElement("span");
+        가격.className = "가격";
+        가격.textContent = 메뉴.가격.toLocaleString("ko-KR") + "원"; // 4500 → 4,500원
+
+        const 설명 = document.createElement("p");
+        설명.className = "설명";
+        설명.textContent = 메뉴.설명;
+
+        줄.appendChild(이름);
+        줄.appendChild(가격);
+        카드.appendChild(줄);
+        카드.appendChild(설명);
+        자리.appendChild(카드);
+      });
+    });
+    }
+
+    그리기("전체");   // 처음 들어오면 '전체'가 선택된 상태
+  </script>
+</body>
+</html>
